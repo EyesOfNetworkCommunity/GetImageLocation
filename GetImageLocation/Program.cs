@@ -62,19 +62,22 @@ namespace TestingImageSearchDLL
             }
 
             string path = @"C:\eon\APX\EON4APPS\log\GetImageLocation.log";
-            FileStream fs = File.Open(path,FileMode.Append);
+ 
+            if (!File.Exists("C:\\eon\\APX\\EON4APPS\\ImageSearchDLL.dll"))
+            {
+                FileStream fs = File.Open(path, FileMode.Append);
+                Console.WriteLine("Could not find C:\\eon\\APX\\EON4APPS\\ImageSearchDLL.dll.");
+                AddText(fs, "Could not find C:\\eon\\APX\\EON4APPS\\ImageSearchDLL.dll.");
+                fs.Close();
+                return 1;
+            }
 
             if (iDebug == 1)
             {
+                FileStream fs = File.Open(path, FileMode.Append);
                 AddText(fs, "GetImageLocation .NET is in the place....\n");
-            }    
-            
-            if (!File.Exists("C:\\eon\\APX\\EON4APPS\\ImageSearchDLL.dll"))
-            {
-                Console.WriteLine("Could not find C:\\eon\\APX\\EON4APPS\\ImageSearchDLL.dll.");
-                AddText(fs, "Could not find C:\\eon\\APX\\EON4APPS\\ImageSearchDLL.dll.");
-                return 1;
-            }
+                fs.Close();
+            }   
 
             int ResolutionHeight = Screen.PrimaryScreen.Bounds.Height;
             int ResolutionWidth = Screen.PrimaryScreen.Bounds.Width;
@@ -97,14 +100,16 @@ namespace TestingImageSearchDLL
                                                SystemInformation.VirtualScreen.Size,
                                                CopyPixelOperation.SourceCopy);
 
-                    screenshot.Save("C:\\eon\\APX\\EON4APPS\\Last-Screenshot.png", System.Drawing.Imaging.ImageFormat.Png);
+                    screenshot.Save("C:\\eon\\APX\\EON4APPS\\log\\Last-Screenshot.png", System.Drawing.Imaging.ImageFormat.Png);
                 }
                 string result = ImageSearch(0, 0, ResolutionWidth,ResolutionHeight, args[0], iDebug);
 
                 Console.Write(result);
                 if (iDebug == 1)
                 {
+                    FileStream fs = File.Open(path, FileMode.Append);
                     AddText(fs, result + "\n");
+                    fs.Close();
                 }
                 return 0;
             }
@@ -113,7 +118,9 @@ namespace TestingImageSearchDLL
                 Console.WriteLine("File: " + args[0] + " doesn't exist.");
                 if (iDebug == 1)
                 {
+                    FileStream fs = File.Open(path, FileMode.Append);
                     AddText(fs, "File: " + args[0] + " doesn't exist.");
+                    fs.Close();
                 }
                 return 1;
             }
