@@ -22,7 +22,8 @@ namespace TestingImageSearchDLL
             [MarshalAs(UnmanagedType.LPStr)]string FromImageFile,
             [MarshalAs(UnmanagedType.LPStr)]string aImageFile,
             [MarshalAs(UnmanagedType.I4)]int debug,
-            [MarshalAs(UnmanagedType.I4)]int Variation);
+            [MarshalAs(UnmanagedType.I4)]int Variation,
+            [MarshalAs(UnmanagedType.I4)]int GreenDrift);
 
         [DllImport("ImageSearchDLL.dll")]
         static extern string ImageSearch([MarshalAs(UnmanagedType.I4)]int aLeft,
@@ -31,7 +32,8 @@ namespace TestingImageSearchDLL
             [MarshalAs(UnmanagedType.I4)]int aBottom,
             [MarshalAs(UnmanagedType.LPStr)]string aImageFile,
             [MarshalAs(UnmanagedType.I4)]int debug,
-            [MarshalAs(UnmanagedType.I4)]int Variation);
+            [MarshalAs(UnmanagedType.I4)]int Variation,
+            [MarshalAs(UnmanagedType.I4)]int GreenDrift);
 
         private static void AddText(FileStream fs, string value)
         {
@@ -48,13 +50,14 @@ namespace TestingImageSearchDLL
                             // 2 means Save ScreenShot only if ImageSearch not found
 
             int aVariation = 0;
+            int GreenDrift = 0;
 
             string result;
 
             if (args.Length < 1)  // Warning : Index was out of the bounds of the array
             {
                 Console.Write("Usage:\n");
-                Console.Write("GetImageLocation.exe ImagePathToFindOnScreen Flag Variance [ImagePathToUseAsScreen]\n");
+                Console.Write("GetImageLocation.exe ImagePathToFindOnScreen Flag Variance GreenDrift [ImagePathToUseAsScreen]\n");
                 Console.Write("Flag:\n");
                 Console.Write("\t 0: Short output, no debug\n");
                 Console.Write("\t 1: Full debug\n");
@@ -65,6 +68,9 @@ namespace TestingImageSearchDLL
                 Console.Write("Variance:\n");
                 Console.Write("\t 0: Strict color comparaison\n");
                 Console.Write("\t n: (Max: 255) Color derive acceptance\n");
+                Console.Write("GreenDrift:\n");
+                Console.Write("\t 0: Strict color comparaison\n");
+                Console.Write("\t 1: Color derive to the green (Black and White fixing)\n");
                 Console.Write("Ex: GetImageLocation.exe c:\\bob.l.eponge\\MonIcone.bmp 1\n");
                 return 1;
             }
@@ -73,6 +79,7 @@ namespace TestingImageSearchDLL
             {
                 iDebug = 0;
                 aVariation = 0;
+                GreenDrift = 0;
             } else 
             {
                 iDebug = 0;
@@ -88,6 +95,11 @@ namespace TestingImageSearchDLL
                 if (Convert.ToInt32(args[2]) < 256)
                 {
                     aVariation = Convert.ToInt32(args[2]);
+                }
+                GreenDrift = 0;
+                if (Convert.ToInt32(args[3]) == 1)
+                {
+                    GreenDrift = Convert.ToInt32(args[3]);
                 }
             }
 
@@ -108,8 +120,6 @@ namespace TestingImageSearchDLL
                 AddText(fs, "GetImageLocation .NET is in the place....\n");
                 fs.Close();
             }
-
-            //   ChangeMyDisplaySettings(1024, 720, 32);
            
             int ResolutionHeight = Screen.PrimaryScreen.Bounds.Height;
             int ResolutionWidth = Screen.PrimaryScreen.Bounds.Width;
@@ -135,13 +145,13 @@ namespace TestingImageSearchDLL
                     screenshot.Save("log\\Last-Screenshot.png", System.Drawing.Imaging.ImageFormat.Png);
                 }
 
-                if (args.Length > 3)
+                if (args.Length > 4)
                 {
-                    result = ImageSearchFile(0, 0, ResolutionWidth, ResolutionHeight, args[2], args[0], iDebug, aVariation);
+                    result = ImageSearchFile(0, 0, ResolutionWidth, ResolutionHeight, args[2], args[0], iDebug, aVariation, GreenDrift);
                 }
                 else
                 {
-                    result = ImageSearch(0, 0, ResolutionWidth,ResolutionHeight, args[0], iDebug, aVariation);
+                    result = ImageSearch(0, 0, ResolutionWidth,ResolutionHeight, args[0], iDebug, aVariation, GreenDrift);
                 }
 
                 Console.Write(result);
