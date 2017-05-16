@@ -57,7 +57,7 @@ namespace TestingImageSearchDLL
             if (args.Length < 1)  // Warning : Index was out of the bounds of the array
             {
                 Console.Write("Usage:\n");
-                Console.Write("GetImageLocation.exe ImagePathToFindOnScreen Flag Variance GreenDrift [ImagePathToUseAsScreen]\n");
+                Console.Write("GetImageLocation.exe ImagePathToFindOnScreen Flag Variance GreenDrift\n");
                 Console.Write("Flag:\n");
                 Console.Write("\t 0: Short output, no debug\n");
                 Console.Write("\t 1: Full debug\n");
@@ -75,7 +75,7 @@ namespace TestingImageSearchDLL
                 return 1;
             }
 
-            if (args.Length < 3)  // Warning : Index was out of the bounds of the array
+            if (args.Length < 2)  // Warning : Index was out of the bounds of the array
             {
                 iDebug = 0;
                 aVariation = 0;
@@ -145,14 +145,14 @@ namespace TestingImageSearchDLL
                     screenshot.Save("log\\Last-Screenshot.png", System.Drawing.Imaging.ImageFormat.Png);
                 }
 
-                if (args.Length > 4)
+             /*   if (args.Length > 4)
                 {
                     result = ImageSearchFile(0, 0, ResolutionWidth, ResolutionHeight, args[2], args[0], iDebug, aVariation, GreenDrift);
                 }
                 else
-                {
+                {*/
                     result = ImageSearch(0, 0, ResolutionWidth,ResolutionHeight, args[0], iDebug, aVariation, GreenDrift);
-                }
+             /*   } */
 
                 Console.Write(result);
                 if (iDebug == 1)
