@@ -14,7 +14,7 @@ namespace TestingImageSearchDLL
 {
     class Program
     {
-        [DllImport("ImageSearchDLL.dll")]
+        [DllImport("..\\lib\\ImageSearchDLL.dll")]
         static extern string ImageSearchFile([MarshalAs(UnmanagedType.I4)]int aLeft, 
             [MarshalAs(UnmanagedType.I4)]int aTop, 
             [MarshalAs(UnmanagedType.I4)]int aRight,
@@ -25,7 +25,7 @@ namespace TestingImageSearchDLL
             [MarshalAs(UnmanagedType.I4)]int Variation,
             [MarshalAs(UnmanagedType.I4)]int GreenDrift);
 
-        [DllImport("ImageSearchDLL.dll")]
+        [DllImport("..\\lib\\ImageSearchDLL.dll")]
         static extern string ImageSearch([MarshalAs(UnmanagedType.I4)]int aLeft,
             [MarshalAs(UnmanagedType.I4)]int aTop,
             [MarshalAs(UnmanagedType.I4)]int aRight,
@@ -103,13 +103,13 @@ namespace TestingImageSearchDLL
                 }
             }
 
-            string path = "log\\GetImageLocation.log";
+            string path = "..\\log\\GetImageLocation.log";
  
-            if (!File.Exists("ImageSearchDLL.dll"))
+            if (!File.Exists("..\\lib\\ImageSearchDLL.dll"))
             {
                 FileStream fs = File.Open(path, FileMode.Append);
-                Console.WriteLine("Could not find \\ImageSearchDLL.dll.");
-                AddText(fs, "Could not find \\ImageSearchDLL.dll.");
+                Console.WriteLine("Could not find ..\\lib\\ImageSearchDLL.dll.");
+                AddText(fs, "Could not find ..\\lib\\ImageSearchDLL.dll.");
                 fs.Close();
                 return 1;
             }
